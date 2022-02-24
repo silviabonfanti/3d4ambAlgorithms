@@ -39,6 +39,21 @@ public class ThresholdCertifierTest {
 	public void testThresholdCertifierE3() {
 		// step <= 0 
 		MyThresholdCertifier m = new MyThresholdCertifier(5, 10, 0);
+
+
+	/**
+	 * Check goto.
+	 *
+	 * @param dp        the dp
+	 * @param sol       the sol
+	 * @param nextDepth the next depth
+	 * @param result    the result
+	 */
+	// check that given solution it goes to
+	static void checkGoTo(ThresholdCertifier dp, ThresholdCertifier.Solution sol, int nextDepth, Result result) {
+		dp.computeNextThreshold(sol);
+		assertEquals(nextDepth, dp.getCurrentThreshold());
+		assertEquals(result, dp.getCurrentStatus().currentResult);
 	}
 
 }

@@ -1,20 +1,20 @@
 package p3d4amb.algorithms.comparator;
 
 
-import p3d4amb.algorithms.PEST_NThresholdCertifier;
+import p3d4amb.algorithms.PestNThresholdCertifier;
 
 public class Pest3Sim extends ThresholdCertifierSim{
 
-	public PEST_NThresholdCertifier dp;
+	public PestNThresholdCertifier dp;
 	public int stepsPestNew;
 
 
 	public Pest3Sim(int startingLevel) {
-		dp = new PEST_NThresholdCertifier(startingLevel);
+		dp = new PestNThresholdCertifier(startingLevel);
 		stepsPestNew=0;
 	}
 
-	public PEST_NThresholdCertifier getDp() {
+	public PestNThresholdCertifier getDp() {
 		return dp;
 	}
 

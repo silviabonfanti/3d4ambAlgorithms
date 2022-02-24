@@ -11,14 +11,14 @@ import p3d4amb.algorithms.ThresholdCertifier.Solution;
 /**
  * The Class PestDepthCertifierTest.
  */
-public class PestDepthCertifierTestWrong extends DepthCertifierTest{
+public class PestThresholdCertifierTestWrong extends ThresholdCertifierTest{
 
 	/**
 	 * Test scenario all right to1.
 	 */
 	@Test
 	public void testScenarioAllRightTo1() {
-		PESTThresholdCertifier dp = new PESTThresholdCertifier(5);
+		PestThresholdCertifier dp = new PestThresholdCertifier(5);
 		assertEquals(5, dp.getCurrentThreshold());
 		checkGoTo(dp, Solution.RIGHT, 4, CONTINUE);
 		checkGoTo(dp, Solution.RIGHT, 3, CONTINUE);
@@ -35,7 +35,7 @@ public class PestDepthCertifierTestWrong extends DepthCertifierTest{
 	 */
 	@Test
 	public void testScenarioOneMistakeReachingTarget() {
-		PESTThresholdCertifier dp = new PESTThresholdCertifier(3);
+		PestThresholdCertifier dp = new PestThresholdCertifier(3);
 		assertEquals(3, dp.getCurrentThreshold());
 		// 1 wrong is tolerated
 		checkGoTo(dp, Solution.WRONG, 3, CONTINUE);
@@ -53,7 +53,7 @@ public class PestDepthCertifierTestWrong extends DepthCertifierTest{
 	 */
 	@Test
 	public void testScenarioOneMistakeIntarget() {
-		PESTThresholdCertifier dp = new PESTThresholdCertifier(3);
+		PestThresholdCertifier dp = new PestThresholdCertifier(3);
 		assertEquals(3, dp.getCurrentThreshold());
 		checkGoTo(dp, Solution.RIGHT, 2, CONTINUE);
 		checkGoTo(dp, Solution.RIGHT, 1, CONTINUE);
@@ -70,7 +70,7 @@ public class PestDepthCertifierTestWrong extends DepthCertifierTest{
 	 */
 	@Test
 	public void testScenarioCertifiedButNotconsecutive() {
-		PESTThresholdCertifier dp = new PESTThresholdCertifier(3);
+		PestThresholdCertifier dp = new PestThresholdCertifier(3);
 		checkGoTo(dp, Solution.RIGHT, 2, CONTINUE);
 		checkGoTo(dp, Solution.RIGHT, 1, CONTINUE);
 		// first mistake
@@ -86,7 +86,7 @@ public class PestDepthCertifierTestWrong extends DepthCertifierTest{
 	 */
 	@Test
 	public void testScenarioDoubleMistakeNotconsecutive() {
-		PESTThresholdCertifier dp = new PESTThresholdCertifier(3);
+		PestThresholdCertifier dp = new PestThresholdCertifier(3);
 		checkGoTo(dp, Solution.RIGHT, 2, CONTINUE);
 		// first error at 2
 		checkGoTo(dp, Solution.WRONG, 2, CONTINUE);
@@ -110,7 +110,7 @@ public class PestDepthCertifierTestWrong extends DepthCertifierTest{
 	 */
 	@Test
 	public void testScenarioMistakesAtMaxDepth() {
-		PESTThresholdCertifier dp = new PESTThresholdCertifier(3);
+		PestThresholdCertifier dp = new PestThresholdCertifier(3);
 		assertEquals(3, dp.getCurrentThreshold());
 		// first error at 3
 		checkGoTo(dp, Solution.WRONG, 3, CONTINUE);
@@ -123,7 +123,7 @@ public class PestDepthCertifierTestWrong extends DepthCertifierTest{
 	 */
 	@Test
 	public void testScenario2MistakesAtMaxLevel() {
-		PESTThresholdCertifier dp = new PESTThresholdCertifier(3);
+		PestThresholdCertifier dp = new PestThresholdCertifier(3);
 		assertEquals(3, dp.getCurrentThreshold());
 		checkGoTo(dp, Solution.RIGHT, 2, CONTINUE);
 		checkGoTo(dp, Solution.WRONG, 2, CONTINUE);
@@ -133,7 +133,7 @@ public class PestDepthCertifierTestWrong extends DepthCertifierTest{
 
 	@Test
 	public void testScenario1MistakesAtMaxLevel() {
-		PESTThresholdCertifier dp = new PESTThresholdCertifier(3);
+		PestThresholdCertifier dp = new PestThresholdCertifier(3);
 		assertEquals(3, dp.getCurrentThreshold());
 		checkGoTo(dp, Solution.RIGHT, 2, CONTINUE);
 		checkGoTo(dp, Solution.WRONG, 2, CONTINUE);
@@ -146,7 +146,7 @@ public class PestDepthCertifierTestWrong extends DepthCertifierTest{
 	 */
 	@Test
 	public void testScenarioSomeMistakesIncreaseTarget() {
-		PESTThresholdCertifier dp = new PESTThresholdCertifier(6);
+		PestThresholdCertifier dp = new PestThresholdCertifier(6);
 		// rigth at 6 -> 5
 		checkGoTo(dp, Solution.RIGHT, 5, CONTINUE);
 		// error at 5 -> 5
@@ -163,7 +163,7 @@ public class PestDepthCertifierTestWrong extends DepthCertifierTest{
 
 	@Test
 	public void testScenarioTwoErrorsSameLevel() {
-		PESTThresholdCertifier dp = new PESTThresholdCertifier(3);
+		PestThresholdCertifier dp = new PestThresholdCertifier(3);
 		checkGoTo(dp, Solution.RIGHT, 2, CONTINUE);
 		//
 		checkGoTo(dp, Solution.RIGHT, 1, CONTINUE);
@@ -178,7 +178,7 @@ public class PestDepthCertifierTestWrong extends DepthCertifierTest{
 	 */
 	@Test
 	public void testScenarioNotCertified() {
-		PESTThresholdCertifier dp = new PESTThresholdCertifier(6);
+		PestThresholdCertifier dp = new PestThresholdCertifier(6);
 		// rigth at 6 -> 5
 		checkGoTo(dp, Solution.RIGHT, 5, CONTINUE);
 		// error at 5 -> 5
@@ -192,7 +192,7 @@ public class PestDepthCertifierTestWrong extends DepthCertifierTest{
 	 */
 	@Test
 	public void testScenarioWrongFromBeginning() {
-		PESTThresholdCertifier dp = new PESTThresholdCertifier(6);
+		PestThresholdCertifier dp = new PestThresholdCertifier(6);
 		// wrong at 6 -> 6
 		checkGoTo(dp, Solution.WRONG, 6, CONTINUE);
 		// wrong at 6 -> 6

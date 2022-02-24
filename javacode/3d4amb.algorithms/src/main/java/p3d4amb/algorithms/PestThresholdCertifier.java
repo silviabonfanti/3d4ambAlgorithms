@@ -7,20 +7,22 @@ import org.apache.log4j.Logger;
  * PEST Algorithm
  */
 
-public class PESTThresholdCertifier extends ThresholdCertifier {
-	private int nextDepth;
-	private int maxDepth;
+public class PestThresholdCertifier extends ThresholdCertifier {
 	private int limitL;
 	private int limitR;
 	private int chance;
 	private double value;
 
 	// Logger
-	private final Logger logger = Logger.getLogger(PESTThresholdCertifier.class);
+	private final Logger logger = Logger.getLogger(PestThresholdCertifier.class);
 
-	public PESTThresholdCertifier(int initThreshold) {
+	/**
+	 * Constructor
+	 *
+	 * @param initThreshold:  start from
+	 */
+	public PestThresholdCertifier(int initThreshold) {
 		super(initThreshold,initThreshold,RIGHT_ANSWERS_TO_CERTIFY);
-		maxDepth = initThreshold;
 		limitL = initThreshold;
 		limitR = 1;
 		chance = 1;
@@ -34,31 +36,28 @@ public class PESTThresholdCertifier extends ThresholdCertifier {
 	 * @param maxThreshold: finish maximum at
 	 * @param targetThreshold: target threshold to be certified, 1 is the minimum value
 	 */
-	public PESTThresholdCertifier(int initThreshold, int maxThreshold, int targetThreshold) {
-		super(initThreshold, maxThreshold, 1);
-		this.maxThreshold = maxThreshold;
+	public PestThresholdCertifier(int initThreshold, int maxThreshold, int targetThreshold) {
+		super(initThreshold, maxThreshold, RIGHT_ANSWERS_TO_CERTIFY);
 		limitL = initThreshold;
 		limitR = targetThreshold;
+		chance = 1;
 	}
 
 
 	@Override
 	public void computeNextThreshold(ThresholdCertifier.Solution solution) {
-		logger.debug("Compute next depth");
+		logger.debug("Compute next threshold");
 		if (solution == ThresholdCertifier.Solution.WRONG) {
-			if (chance > 0 && certifierStatus.currentThreshold == maxDepth) {
+			if (chance > 0 && certifierStatus.currentThreshold == maxThreshold) {
 				chance--;
-			} else if (chance == 0 && certifierStatus.currentThreshold == maxDepth) {
+			} else if (chance == 0 && certifierStatus.currentThreshold == maxThreshold) {
 				certifierStatus.currentResult = Result.FINISH_NOT_CERTIFIED;
 			} else {
 				limitR = certifierStatus.currentThreshold;
-
 				// Numerical rounding (Ceil: round up)
 				value = ((double) limitL + limitR) / 2;
-				nextDepth = (int) (Math.ceil(value));
-
-				// Next depth
-				certifierStatus.currentThreshold = nextDepth;
+				// Next threshold
+				certifierStatus.currentThreshold = (int) (Math.ceil(value));
 
 				if ((limitL - limitR) == 1) {
 					certifierStatus.currentResult = Result.FINISH_CERTIFIED;
@@ -70,13 +69,10 @@ public class PESTThresholdCertifier extends ThresholdCertifier {
 			// Nothing (Skip button)
 		} else if (solution == ThresholdCertifier.Solution.RIGHT) {
 			limitL = certifierStatus.currentThreshold;
-
 			// Numerical rounding (Floor: round down)v
 			value = ((double) limitL + limitR) / 2;
-			nextDepth = (int) (Math.floor(value));
-
-			// Next depth
-			certifierStatus.currentThreshold = nextDepth;
+			// Next threshold
+			certifierStatus.currentThreshold = (int) (Math.floor(value));
 
 			if ((limitL - limitR) == 1) {
 				certifierStatus.currentResult = Result.FINISH_CERTIFIED;
