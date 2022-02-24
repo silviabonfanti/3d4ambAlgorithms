@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import p3d4amb.algorithms.ThresholdCertifier.Result;
 
-public class DepthCertifierTest {
+public class ThresholdCertifierTest {
 
 	/**
 	 * Check goto.

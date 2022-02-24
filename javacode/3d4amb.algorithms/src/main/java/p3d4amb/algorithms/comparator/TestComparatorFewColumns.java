@@ -7,8 +7,8 @@ import java.io.PrintStream;
 import java.util.Random;
 
 import p3d4amb.algorithms.BestNThresholdCertifier;
-import p3d4amb.algorithms.PESTThresholdCertifier;
-import p3d4amb.algorithms.PEST_NThresholdCertifier;
+import p3d4amb.algorithms.PestThresholdCertifier;
+import p3d4amb.algorithms.PestNThresholdCertifier;
 import p3d4amb.algorithms.StrictStaircaseThresholdCertifier;
 import p3d4amb.algorithms.ThresholdCertifier;
 import p3d4amb.algorithms.ThresholdCertifier.Solution;
@@ -45,9 +45,9 @@ public class TestComparatorFewColumns {
 					// create certifiers
 					ThresholdCertifier[] certifiers = {
 							// PestDepthCertifier
-							new PESTThresholdCertifier(startingLevel),
+							new PestThresholdCertifier(startingLevel),
 							// PestDepthCertifierNew
-							new PEST_NThresholdCertifier(startingLevel),
+							new PestNThresholdCertifier(startingLevel),
 							// Best3DepthCertifier
 							new BestNThresholdCertifier(startingLevel),
 							// StrictStaircaseDepthCertifier

@@ -12,7 +12,7 @@ import p3d4amb.algorithms.ThresholdCertifier.Solution;
 /**
  * The Class Best3DepthCertifierTest.
  */
-public class Best3DepthCertifierTest extends DepthCertifierTest{
+public class BestNThresholdCertifierTest extends ThresholdCertifierTest{
 
 	/**
 	 * Test scenario all right to1.

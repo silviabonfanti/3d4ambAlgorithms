@@ -9,7 +9,7 @@ import org.junit.Test;
 /**
  * The Class DepthCertifierTest.
  */
-public class StrictStaircaseDepthCertifierTest extends DepthCertifierTest {
+public class StrictStaircaseDepthCertifierTest extends ThresholdCertifierTest {
 
 	/**
 	 * Test scenario all right to1.

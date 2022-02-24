@@ -5,7 +5,7 @@ package p3d4amb.algorithms;
  * PEST Algorithm
  */
 
-public class PEST_NThresholdCertifier extends ThresholdCertifier {
+public class PestNThresholdCertifier extends ThresholdCertifier {
 
 	private int limitL;
 	private int limitR;
@@ -21,7 +21,7 @@ public class PEST_NThresholdCertifier extends ThresholdCertifier {
 	 * @param targetThreshold: target threshold to be certified, 1 is the minimum value
 	 * @param rightAnswersToCertify: number of right answers given at target threshold to certify it
 	 */
-	public PEST_NThresholdCertifier(int initThreshold, int maxThreshold, int targetThreshold, int rightAnswersToCertify) {
+	public PestNThresholdCertifier(int initThreshold, int maxThreshold, int targetThreshold, int rightAnswersToCertify) {
 		super(initThreshold, maxThreshold, rightAnswersToCertify);
 		this.maxThreshold = maxThreshold;
 		limitL = initThreshold;
@@ -39,7 +39,7 @@ public class PEST_NThresholdCertifier extends ThresholdCertifier {
 	 * targetThreshold: TARGET_THRESHOLD
 	 * rightAnswersToCertify: RIGHT_ANSWERS_TO_CERTIFY
 	 */
-	public PEST_NThresholdCertifier(int initThreshold) {
+	public PestNThresholdCertifier(int initThreshold) {
 		this(initThreshold, initThreshold, TARGET_THRESHOLD, RIGHT_ANSWERS_TO_CERTIFY);
 	}
 
@@ -51,7 +51,7 @@ public class PEST_NThresholdCertifier extends ThresholdCertifier {
 	 * targetThreshold: TARGET_THRESHOLD
 	 * @param rightAnswersToCertify: number of right answers given at target threshold to certify it
 	 */
-	public PEST_NThresholdCertifier(int initThreshold, int rightAnswersToCertify) {
+	public PestNThresholdCertifier(int initThreshold, int rightAnswersToCertify) {
 		this(initThreshold, initThreshold, TARGET_THRESHOLD, rightAnswersToCertify);
 	}
 
@@ -63,7 +63,7 @@ public class PEST_NThresholdCertifier extends ThresholdCertifier {
 	 * @param targetThreshold: target threshold to be certified, 1 is the minimum value
 	 * @param rightAnswersToCertify: number of right answers given at target threshold to certify it
 	 */
-	public PEST_NThresholdCertifier(int initThreshold, int targetThreshold, int answersToCertify) {
+	public PestNThresholdCertifier(int initThreshold, int targetThreshold, int answersToCertify) {
 		this(initThreshold, initThreshold, targetThreshold, answersToCertify);
 	}
 

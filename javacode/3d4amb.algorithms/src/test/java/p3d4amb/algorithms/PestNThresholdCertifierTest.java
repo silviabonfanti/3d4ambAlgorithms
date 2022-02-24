@@ -19,7 +19,7 @@ import p3d4amb.algorithms.comparator.TestComparatorTestRetest;
  * Method checkToGo indicate as second parameter the successive depth to do (so
  * for the last line is irrelevant)
  */
-public class PestDepthCertifierNewTest extends DepthCertifierTest{
+public class PestNThresholdCertifierTest extends ThresholdCertifierTest{
 
 	/**
 	 * 01: Test scenario with initDepth negative, throw an exception
@@ -27,7 +27,7 @@ public class PestDepthCertifierNewTest extends DepthCertifierTest{
 	@Test
 	public void test01() {
 		try {
-			new PEST_NThresholdCertifier(-12);
+			new PestNThresholdCertifier(-12);
 			fail("Should throw exception");
 		} catch (IllegalArgumentException e) {
 			// Exception expected
@@ -40,7 +40,7 @@ public class PestDepthCertifierNewTest extends DepthCertifierTest{
 	 */
 	@Test
 	public void test02() {
-		PEST_NThresholdCertifier dp = new PEST_NThresholdCertifier(12);
+		PestNThresholdCertifier dp = new PestNThresholdCertifier(12);
 		checkGoTo(dp, Solution.NULL, 12, CONTINUE); // NULL (SKIP BUTTON)
 		checkGoTo(dp, Solution.RIGHT, 6, CONTINUE); // OK 12
 		checkGoTo(dp, Solution.RIGHT, 3, CONTINUE); // OK 6
@@ -56,7 +56,7 @@ public class PestDepthCertifierNewTest extends DepthCertifierTest{
 	 */
 	@Test
 	public void test03() {
-		PEST_NThresholdCertifier dp = new PEST_NThresholdCertifier(12);
+		PestNThresholdCertifier dp = new PestNThresholdCertifier(12);
 		checkGoTo(dp, Solution.WRONG, 12, CONTINUE); // NO 12 (chance = 0)
 		checkGoTo(dp, Solution.WRONG, 12, FINISH_NOT_CERTIFIED); // NO 12, FINISH_NOT_CERTIFIED
 	}
@@ -66,7 +66,7 @@ public class PestDepthCertifierNewTest extends DepthCertifierTest{
 	 */
 	@Test
 	public void test04() {
-		PEST_NThresholdCertifier dp = new PEST_NThresholdCertifier(12);
+		PestNThresholdCertifier dp = new PestNThresholdCertifier(12);
 		checkGoTo(dp, Solution.RIGHT, 6, CONTINUE); // OK 12
 		checkGoTo(dp, Solution.RIGHT, 3, CONTINUE); // OK 6
 		checkGoTo(dp, Solution.RIGHT, 2, CONTINUE); // OK 3
@@ -82,7 +82,7 @@ public class PestDepthCertifierNewTest extends DepthCertifierTest{
 	 */
 	@Test
 	public void test05() {
-		PEST_NThresholdCertifier dp = new PEST_NThresholdCertifier(12);
+		PestNThresholdCertifier dp = new PestNThresholdCertifier(12);
 		checkGoTo(dp, Solution.RIGHT, 6, CONTINUE); // OK 12
 		checkGoTo(dp, Solution.WRONG, 9, CONTINUE); // NO 6
 		checkGoTo(dp, Solution.WRONG, 11, CONTINUE); // NO 9
@@ -101,7 +101,7 @@ public class PestDepthCertifierNewTest extends DepthCertifierTest{
 	 */
 	@Test
 	public void test06() {
-		PEST_NThresholdCertifier dp = new PEST_NThresholdCertifier(12);
+		PestNThresholdCertifier dp = new PestNThresholdCertifier(12);
 		checkGoTo(dp, Solution.RIGHT, 6, CONTINUE); // OK 12
 		checkGoTo(dp, Solution.RIGHT, 3, CONTINUE); // OK 6
 		checkGoTo(dp, Solution.WRONG, 5, CONTINUE); // NO 3
@@ -118,7 +118,7 @@ public class PestDepthCertifierNewTest extends DepthCertifierTest{
 	 */
 	@Test
 	public void test07() {
-		PEST_NThresholdCertifier dp = new PEST_NThresholdCertifier(12);
+		PestNThresholdCertifier dp = new PestNThresholdCertifier(12);
 		checkGoTo(dp, Solution.RIGHT, 6, CONTINUE); // OK 12
 		checkGoTo(dp, Solution.WRONG, 9, CONTINUE); // NO 6
 		checkGoTo(dp, Solution.RIGHT, 7, CONTINUE); // OK 9
@@ -142,7 +142,7 @@ public class PestDepthCertifierNewTest extends DepthCertifierTest{
 	 */
 	@Test
 	public void test08() {
-		PEST_NThresholdCertifier dp = new PEST_NThresholdCertifier(12);
+		PestNThresholdCertifier dp = new PestNThresholdCertifier(12);
 		checkGoTo(dp, Solution.RIGHT, 6, CONTINUE); // OK 12
 		checkGoTo(dp, Solution.RIGHT, 3, CONTINUE); // OK 6
 		checkGoTo(dp, Solution.WRONG, 5, CONTINUE); // NO 3
@@ -159,7 +159,7 @@ public class PestDepthCertifierNewTest extends DepthCertifierTest{
 	 */
 	@Test
 	public void test09() {
-		PEST_NThresholdCertifier dp = new PEST_NThresholdCertifier(12);
+		PestNThresholdCertifier dp = new PestNThresholdCertifier(12);
 		checkGoTo(dp, Solution.RIGHT, 6, CONTINUE); // OK 12
 		checkGoTo(dp, Solution.RIGHT, 3, CONTINUE); // OK 6
 		checkGoTo(dp, Solution.WRONG, 5, CONTINUE); // NO 3
@@ -177,7 +177,7 @@ public class PestDepthCertifierNewTest extends DepthCertifierTest{
 	 */
 	@Test
 	public void test10() {
-		PEST_NThresholdCertifier dp = new PEST_NThresholdCertifier(12);
+		PestNThresholdCertifier dp = new PestNThresholdCertifier(12);
 		// One wrong is tolerated
 		checkGoTo(dp, Solution.WRONG, 12, CONTINUE); // NO 12 (chance = 0)
 		checkGoTo(dp, Solution.RIGHT, 6, CONTINUE); // OK 12
@@ -194,7 +194,7 @@ public class PestDepthCertifierNewTest extends DepthCertifierTest{
 	 */
 	@Test
 	public void test11() {
-		PEST_NThresholdCertifier dp = new PEST_NThresholdCertifier(12);
+		PestNThresholdCertifier dp = new PestNThresholdCertifier(12);
 		checkGoTo(dp, Solution.RIGHT, 6, CONTINUE); // OK 12
 		checkGoTo(dp, Solution.WRONG, 9, CONTINUE); // NO 6
 		checkGoTo(dp, Solution.RIGHT, 7, CONTINUE); // OK 9
