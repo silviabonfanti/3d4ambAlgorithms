@@ -4,8 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import p3d4amb.algorithms.ThresholdCertifier.CertifierStatus;
-import p3d4amb.algorithms.ThresholdCertifier.Solution;
+import p3d4amb.algorithms.ThresholdCertifier.Result;
 
 public class ThresholdCertifierTest {
 
@@ -39,7 +38,7 @@ public class ThresholdCertifierTest {
 	public void testThresholdCertifierE3() {
 		// step <= 0 
 		MyThresholdCertifier m = new MyThresholdCertifier(5, 10, 0);
-
+	}
 
 	/**
 	 * Check goto.
