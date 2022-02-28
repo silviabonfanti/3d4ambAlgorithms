@@ -9,7 +9,7 @@ public class PestSim extends ThresholdCertifierSim {
 
 	public PestSim(int startingLevel) {
 		dp = new PestThresholdCertifier(startingLevel);
-		stepsPest=0;
+		setStepsPest(0);
 	}
 
 	public PestThresholdCertifier getDp() {
@@ -18,5 +18,9 @@ public class PestSim extends ThresholdCertifierSim {
 
 	public int getStepsPest() {
 		return stepsPest;
+	}
+
+	public void setStepsPest(int stepsPest) {
+		this.stepsPest = stepsPest;
 	}
 }

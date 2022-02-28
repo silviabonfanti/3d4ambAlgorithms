@@ -1,4 +1,4 @@
-package p3d4amb.algorithms.comparator;
+package p3d4amb.algorithms;
 
 import static p3d4amb.algorithms.ThresholdCertifier.Result.CONTINUE;
 
@@ -17,9 +17,16 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.Test;
 
 import p3d4amb.algorithms.ThresholdCertifier;
 import p3d4amb.algorithms.ThresholdCertifier.Solution;
+import p3d4amb.algorithms.comparator.BestNSim;
+import p3d4amb.algorithms.comparator.ElementsType;
+import p3d4amb.algorithms.comparator.Patient;
+import p3d4amb.algorithms.comparator.PestNSim;
+import p3d4amb.algorithms.comparator.PestSim;
+import p3d4amb.algorithms.comparator.StrictSim;
 
 public class TestComparatorTestRetest {
 
@@ -29,7 +36,8 @@ public class TestComparatorTestRetest {
 
 	static final double probExpectedAnswNotCert = 0.95;
 
-	public static void main(String[] args) throws IOException {
+	@Test
+	public void testRetest() throws IOException {
 		ArrayList<Patient> patientlist = new ArrayList<>();
 
 		// Generate X Patients with random level certified
@@ -46,15 +54,15 @@ public class TestComparatorTestRetest {
 			runPest(patientlist.get(i).getLevelCert(), pest2);
 
 			// PestDepthCertifierNew
-			Pest3Sim pestNew1 = new Pest3Sim(startingLevel);
+			PestNSim pestNew1 = new PestNSim(startingLevel);
 			runPestNew(patientlist.get(i).getLevelCert(), pestNew1);
-			Pest3Sim pestNew2 = new Pest3Sim(startingLevel);
+			PestNSim pestNew2 = new PestNSim(startingLevel);
 			runPestNew(patientlist.get(i).getLevelCert(), pestNew2);
 
 			// Best3DepthCertifier
-			Best3DSim best3D1 = new Best3DSim(startingLevel);
+			BestNSim best3D1 = new BestNSim(startingLevel);
 			runBest3D(patientlist.get(i).getLevelCert(), best3D1);
-			Best3DSim best3D2 = new Best3DSim(startingLevel);
+			BestNSim best3D2 = new BestNSim(startingLevel);
 			runBest3D(patientlist.get(i).getLevelCert(), best3D2);
 
 			// StrictStaircaseDepthCertifier
@@ -79,48 +87,48 @@ public class TestComparatorTestRetest {
 			if (patientLevelCert == 0)
 				solution = getSolutionRandom(Solution.WRONG, probExpectedAnswNotCert);
 			else {
-				if (strict.dp.getCurrentThreshold() >= patientLevelCert)
+				if (strict.getDp().getCurrentThreshold() >= patientLevelCert)
 					solution = getSolutionRandom(Solution.RIGHT, probExpectedAnsw);
 				else
 					solution = getSolutionRandom(Solution.WRONG, probExpectedAnsw);
 			}
-			strict.dp.computeNextThreshold(solution);
-			strict.stepsStrict++;
-		} while (strict.dp.getCurrentStatus().currentResult.equals(CONTINUE));
+			strict.getDp().computeNextThreshold(solution);
+			strict.setStepsStrict(strict.getStepsStrict() + 1);
+		} while (strict.getDp().getCurrentStatus().currentResult.equals(CONTINUE));
 	}
 
-	private static void runBest3D(int patientLevelCert, Best3DSim best3d) {
+	private static void runBest3D(int patientLevelCert, BestNSim best3d) {
 		ThresholdCertifier.Solution solution;
 		do {
 			// patient not certified
 			if (patientLevelCert == 0)
 				solution = getSolutionRandom(Solution.WRONG, probExpectedAnswNotCert);
 			else {
-				if (best3d.dp.getCurrentThreshold() >= patientLevelCert)
+				if (best3d.getDp().getCurrentThreshold() >= patientLevelCert)
 					solution = getSolutionRandom(Solution.RIGHT, probExpectedAnsw);
 				else
 					solution = getSolutionRandom(Solution.WRONG, probExpectedAnsw);
 			}
-			best3d.dp.computeNextThreshold(solution);
-			best3d.stepsBest3D++;
-		} while (best3d.dp.getCurrentStatus().currentResult.equals(CONTINUE));
+			best3d.getDp().computeNextThreshold(solution);
+			best3d.setStepsBestN(best3d.getStepsBestN() + 1);
+		} while (best3d.getDp().getCurrentStatus().currentResult.equals(CONTINUE));
 	}
 
-	private static void runPestNew(int patientLevelCert, Pest3Sim pestNew) {
+	private static void runPestNew(int patientLevelCert, PestNSim pestNew) {
 		ThresholdCertifier.Solution solution;
 		do {
 			// patient not certified
 			if (patientLevelCert == 0)
 				solution = getSolutionRandom(Solution.WRONG, probExpectedAnswNotCert);
 			else {
-				if (pestNew.dp.getCurrentThreshold() >= patientLevelCert)
+				if (pestNew.getDp().getCurrentThreshold() >= patientLevelCert)
 					solution = getSolutionRandom(Solution.RIGHT, probExpectedAnsw);
 				else
 					solution = getSolutionRandom(Solution.WRONG, probExpectedAnsw);
 			}
-			pestNew.dp.computeNextThreshold(solution);
-			pestNew.stepsPestNew++;
-		} while (pestNew.dp.getCurrentStatus().currentResult.equals(CONTINUE));
+			pestNew.getDp().computeNextThreshold(solution);
+			pestNew.setStepsPestN(pestNew.getStepsPestN() + 1);
+		} while (pestNew.getDp().getCurrentStatus().currentResult.equals(CONTINUE));
 	}
 
 	private static void runPest(int patientLevelCert, PestSim pest) {
@@ -130,14 +138,14 @@ public class TestComparatorTestRetest {
 			if (patientLevelCert == 0)
 				solution = getSolutionRandom(Solution.WRONG, probExpectedAnswNotCert);
 			else {
-				if (pest.dp.getCurrentThreshold() >= patientLevelCert)
+				if (pest.getDp().getCurrentThreshold() >= patientLevelCert)
 					solution = getSolutionRandom(Solution.RIGHT, probExpectedAnsw);
 				else
 					solution = getSolutionRandom(Solution.WRONG, probExpectedAnsw);
 			}
-			pest.dp.computeNextThreshold(solution);
-			pest.stepsPest++;
-		} while (pest.dp.getCurrentStatus().currentResult.equals(CONTINUE));
+			pest.getDp().computeNextThreshold(solution);
+			pest.setStepsPest(pest.getStepsPest() + 1);
+		} while (pest.getDp().getCurrentStatus().currentResult.equals(CONTINUE));
 	}
 
 	/**
@@ -214,10 +222,10 @@ public class TestComparatorTestRetest {
 			row.createCell(cellnum++).setCellValue(singleres.getIdPatient());
 			row.createCell(cellnum++).setCellValue(singleres.getPest1().getStepsPest());
 			row.createCell(cellnum++).setCellValue(singleres.getPest2().getStepsPest());
-			row.createCell(cellnum++).setCellValue(singleres.getPestNew1().getStepsPestNew());
-			row.createCell(cellnum++).setCellValue(singleres.getPestNew2().getStepsPestNew());
-			row.createCell(cellnum++).setCellValue(singleres.getBest3d1().getStepsBest3D());
-			row.createCell(cellnum++).setCellValue(singleres.getBest3d2().getStepsBest3D());
+			row.createCell(cellnum++).setCellValue(singleres.getPestN1().getStepsPestN());
+			row.createCell(cellnum++).setCellValue(singleres.getPestN2().getStepsPestN());
+			row.createCell(cellnum++).setCellValue(singleres.getBestN1().getStepsBestN());
+			row.createCell(cellnum++).setCellValue(singleres.getBestN2().getStepsBestN());
 			row.createCell(cellnum++).setCellValue(singleres.getStrict1().getStepsStrict());
 			row.createCell(cellnum++).setCellValue(singleres.getStrict2().getStepsStrict());
 			// if not cert set color to red and set target level at starting level value
@@ -231,10 +239,10 @@ public class TestComparatorTestRetest {
 
 			row.createCell(cellnum++).setCellValue(singleres.getPest1().getDp().getCurrentThreshold());
 			row.createCell(cellnum++).setCellValue(singleres.getPest2().getDp().getCurrentThreshold());
-			row.createCell(cellnum++).setCellValue(singleres.getPestNew1().getDp().getCurrentThreshold());
-			row.createCell(cellnum++).setCellValue(singleres.getPestNew2().getDp().getCurrentThreshold());
-			row.createCell(cellnum++).setCellValue(singleres.getBest3d1().getDp().getCurrentThreshold());
-			row.createCell(cellnum++).setCellValue(singleres.getBest3d2().getDp().getCurrentThreshold());
+			row.createCell(cellnum++).setCellValue(singleres.getPestN1().getDp().getCurrentThreshold());
+			row.createCell(cellnum++).setCellValue(singleres.getPestN2().getDp().getCurrentThreshold());
+			row.createCell(cellnum++).setCellValue(singleres.getBestN1().getDp().getCurrentThreshold());
+			row.createCell(cellnum++).setCellValue(singleres.getBestN2().getDp().getCurrentThreshold());
 			row.createCell(cellnum++).setCellValue(singleres.getStrict1().getDp().getCurrentThreshold());
 			row.createCell(cellnum++).setCellValue(singleres.getStrict2().getDp().getCurrentThreshold());
 			row.createCell(cellnum++)
@@ -242,13 +250,13 @@ public class TestComparatorTestRetest {
 			row.createCell(cellnum++)
 					.setCellValue(singleres.getPest2().getDp().getCurrentStatus().currentResult.toString());
 			row.createCell(cellnum++)
-					.setCellValue(singleres.getPestNew1().getDp().getCurrentStatus().currentResult.toString());
+					.setCellValue(singleres.getPestN1().getDp().getCurrentStatus().currentResult.toString());
 			row.createCell(cellnum++)
-					.setCellValue(singleres.getPestNew2().getDp().getCurrentStatus().currentResult.toString());
+					.setCellValue(singleres.getPestN2().getDp().getCurrentStatus().currentResult.toString());
 			row.createCell(cellnum++)
-					.setCellValue(singleres.getBest3d1().getDp().getCurrentStatus().currentResult.toString());
+					.setCellValue(singleres.getBestN1().getDp().getCurrentStatus().currentResult.toString());
 			row.createCell(cellnum++)
-					.setCellValue(singleres.getBest3d2().getDp().getCurrentStatus().currentResult.toString());
+					.setCellValue(singleres.getBestN2().getDp().getCurrentStatus().currentResult.toString());
 			row.createCell(cellnum++)
 					.setCellValue(singleres.getStrict1().getDp().getCurrentStatus().currentResult.toString());
 			row.createCell(cellnum++)

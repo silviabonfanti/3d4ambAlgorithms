@@ -6,11 +6,11 @@ import p3d4amb.algorithms.StrictStaircaseThresholdCertifier;
 public class StrictSim extends ThresholdCertifierSim{
 
 	StrictStaircaseThresholdCertifier dp;
-	int stepsStrict;
+	private int stepsStrict;
 
 	public StrictSim(int startingLevel) {
 		dp = new StrictStaircaseThresholdCertifier(startingLevel,startingLevel);
-		stepsStrict=0;
+		setStepsStrict(0);
 	}
 
 	public StrictStaircaseThresholdCertifier getDp() {
@@ -19,5 +19,9 @@ public class StrictSim extends ThresholdCertifierSim{
 
 	public int getStepsStrict() {
 		return stepsStrict;
+	}
+
+	public void setStepsStrict(int stepsStrict) {
+		this.stepsStrict = stepsStrict;
 	}
 }

@@ -10,8 +10,7 @@ import org.junit.Test;
 
 import p3d4amb.algorithms.ThresholdCertifier.Result;
 import p3d4amb.algorithms.ThresholdCertifier.Solution;
-import p3d4amb.algorithms.comparator.Pest3Sim;
-import p3d4amb.algorithms.comparator.TestComparatorTestRetest;
+import p3d4amb.algorithms.comparator.PestNSim;
 
 /**
  * Class PestDepthCertifierNewTest
@@ -215,23 +214,23 @@ public class PestNThresholdCertifierTest extends ThresholdCertifierTest{
 	public void testRandom() {
 		for (int i = 0; i < 100; i++) {
 			int patientLevelCert = (int)(Math.random()* 12);
-			Pest3Sim pestNew = new Pest3Sim(startingLevel);
+			PestNSim pestNew = new PestNSim(startingLevel);
 			ThresholdCertifier.Solution solution;
 			do {
 				// patient not certified
 				if (patientLevelCert == 0)
 					solution = TestComparatorTestRetest.getSolutionRandom(Solution.WRONG, probExpectedAnswNotCert);
 				else {
-					if (pestNew.dp.getCurrentThreshold() >= patientLevelCert)
+					if (pestNew.getDp().getCurrentThreshold() >= patientLevelCert)
 						solution = TestComparatorTestRetest.getSolutionRandom(Solution.RIGHT, probExpectedAnsw);
 					else
 						solution = TestComparatorTestRetest.getSolutionRandom(Solution.WRONG, probExpectedAnsw);
 				}
-				pestNew.dp.computeNextThreshold(solution);
-				pestNew.stepsPestNew++;
+				pestNew.getDp().computeNextThreshold(solution);
+				pestNew.setStepsPestN(pestNew.getStepsPestN() + 1);
 				//System.out.println(pestNew.dp.getCurrentDepth());
-			} while (pestNew.dp.getCurrentStatus().currentResult.equals(CONTINUE));
-			System.out.println(patientLevelCert + "  " + pestNew.dp.getCurrentThreshold() + " " + pestNew.stepsPestNew);
+			} while (pestNew.getDp().getCurrentStatus().currentResult.equals(CONTINUE));
+			System.out.println(patientLevelCert + "  " + pestNew.getDp().getCurrentThreshold() + " " + pestNew.getStepsPestN());
 		}
 	}
 

@@ -1,4 +1,4 @@
-package p3d4amb.algorithms.comparator;
+package p3d4amb.algorithms;
 
 import static p3d4amb.algorithms.ThresholdCertifier.Result.CONTINUE;
 
@@ -12,6 +12,7 @@ import p3d4amb.algorithms.PestNThresholdCertifier;
 import p3d4amb.algorithms.StrictStaircaseThresholdCertifier;
 import p3d4amb.algorithms.ThresholdCertifier;
 import p3d4amb.algorithms.ThresholdCertifier.Solution;
+import p3d4amb.algorithms.comparator.Patient;
 
 public class TestComparatorFewColumns {
 

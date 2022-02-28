@@ -20,11 +20,14 @@ public class PestThresholdCertifier extends ThresholdCertifier {
 	 * Constructor
 	 *
 	 * @param initThreshold:  start from
+	 * @param maxThreshold: finish maximum at
+	 * @param targetThreshold: target threshold to be certified, 1 is the minimum value
 	 */
-	public PestThresholdCertifier(int initThreshold) {
+	public PestThresholdCertifier(int initThreshold, int targetThreshold) {
 		super(initThreshold,initThreshold,RIGHT_ANSWERS_TO_CERTIFY);
 		limitL = initThreshold;
-		limitR = 1;
+		limitR = targetThreshold;
+		this.maxThreshold=initThreshold;
 		chance = 1;
 	}
 
@@ -33,20 +36,14 @@ public class PestThresholdCertifier extends ThresholdCertifier {
 	 * Constructor
 	 *
 	 * @param initThreshold:  start from
-	 * @param maxThreshold: finish maximum at
-	 * @param targetThreshold: target threshold to be certified, 1 is the minimum value
 	 */
-	public PestThresholdCertifier(int initThreshold, int maxThreshold, int targetThreshold) {
-		super(initThreshold, maxThreshold, RIGHT_ANSWERS_TO_CERTIFY);
-		limitL = initThreshold;
-		limitR = targetThreshold;
-		chance = 1;
+	public PestThresholdCertifier(int initThreshold) {
+		this(initThreshold,1);
 	}
 
 
 	@Override
 	public void computeNextThreshold(ThresholdCertifier.Solution solution) {
-		logger.debug("Compute next threshold");
 		if (solution == ThresholdCertifier.Solution.WRONG) {
 			if (chance > 0 && certifierStatus.currentThreshold == maxThreshold) {
 				chance--;
