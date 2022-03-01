@@ -73,7 +73,7 @@ public class PestThresholdCertifier extends ThresholdCertifier {
 
 			if ((limitL - limitR) == 1) {
 				certifierStatus.currentResult = Result.FINISH_CERTIFIED;
-				certifierStatus.currentThreshold = limitL;
+				certifierStatus.currentThreshold = limitR;
 			}
 		}
 	}
