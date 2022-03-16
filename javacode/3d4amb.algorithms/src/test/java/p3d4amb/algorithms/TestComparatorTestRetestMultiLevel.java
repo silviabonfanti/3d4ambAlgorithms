@@ -2,7 +2,9 @@ package p3d4amb.algorithms;
 
 import static p3d4amb.algorithms.ThresholdCertifier.Result.CONTINUE;
 
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 
+import com.opencsv.CSVWriter;
+
 import p3d4amb.algorithms.ThresholdCertifier.Solution;
 import p3d4amb.algorithms.comparator.BestNSim;
 import p3d4amb.algorithms.comparator.ElementsType;
@@ -31,14 +35,12 @@ public class TestComparatorTestRetestMultiLevel {
 	static final int numpatients = 3000;
 	static final int startingLevel = 15;
 
-	static final double probExpectedAnsw = 0.99;
-	static final double probExpectedAnswNotCert = 0.99;
+	static final double probExpectedAnsw = 0.9;
+	static final double probExpectedAnswNotCert = 0.9;
 
 	static final double probExpectedAnswAttentionDec = 0.9;
 	static final double probExpectedAnswNotCertAttentionDec = 0.75;
 	static final double stepAttentionDec = 8;
-
-	
 
 	private static void runStrict(int patientLevelCert, StrictSim strict) {
 		do {
@@ -108,10 +110,10 @@ public class TestComparatorTestRetestMultiLevel {
 
 	private static void runPestN(int patientLevelCert, PestNSim pestN) {
 		do {
-			pestNStep(patientLevelCert, pestN,  probExpectedAnswNotCert, probExpectedAnsw);
+			pestNStep(patientLevelCert, pestN, probExpectedAnswNotCert, probExpectedAnsw);
 		} while (pestN.getDp().getCurrentStatus().currentResult.equals(CONTINUE));
 	}
-	
+
 	private static void runPestNAttention(int patientLevelCert, PestNSim pestN) {
 		int countSteps = 0;
 		do {
@@ -144,7 +146,7 @@ public class TestComparatorTestRetestMultiLevel {
 			pestStep(patientLevelCert, pest, probExpectedAnswNotCert, probExpectedAnsw);
 		} while (pest.getDp().getCurrentStatus().currentResult.equals(CONTINUE));
 	}
-	
+
 	private static void runPestAttention(int patientLevelCert, PestSim pest) {
 		int countSteps = 0;
 		do {
@@ -193,10 +195,9 @@ public class TestComparatorTestRetestMultiLevel {
 	 * Save data to Excel file. Each row is composed by: "idPatient", "stepPest1",
 	 * "stepPest2", "steppestN1", "steppestN2", "stepbestN1", "stepbestN2",
 	 * "stepStrict1", "stepStrict2", "targetLevel", "levelPest1", "levelPest2",
-	 * "levelpestN1", "levelpestN2", "levelbestN1", "levelbestN2",
-	 * "levelStrict1", "levelStrict2", "resPest1", "resPest2", "respestN1",
-	 * "respestN2", "resbestN1", "resbestN2", "resStrict1", "resStrict2" because
-	 * of test retest
+	 * "levelpestN1", "levelpestN2", "levelbestN1", "levelbestN2", "levelStrict1",
+	 * "levelStrict2", "resPest1", "resPest2", "respestN1", "respestN2",
+	 * "resbestN1", "resbestN2", "resStrict1", "resStrict2" because of test retest
 	 *
 	 * @param workbook
 	 */
@@ -225,11 +226,11 @@ public class TestComparatorTestRetestMultiLevel {
 				"levelpestN2", "levelbestN1", "levelbestN2", "levelStrict1", "levelStrict2", "resPest1", "resPest2",
 				"respestN1", "respestN2", "resbestN1", "resbestN2", "resStrict1", "resStrict2" };
 		/*
-		 * String[] columns = { "idPatient", "steppestN1", "steppestN2",
-		 * "stepbestN1", "stepbestN2", "stepStrict1", "stepStrict2", "targetLevel",
-		 * "levelpestN1", "levelpestN2", "levelbestN1", "levelbestN2",
-		 * "levelStrict1", "levelStrict2", "respestN1", "respestN2", "resbestN1",
-		 * "resbestN2", "resStrict1", "resStrict2" };
+		 * String[] columns = { "idPatient", "steppestN1", "steppestN2", "stepbestN1",
+		 * "stepbestN2", "stepStrict1", "stepStrict2", "targetLevel", "levelpestN1",
+		 * "levelpestN2", "levelbestN1", "levelbestN2", "levelStrict1", "levelStrict2",
+		 * "respestN1", "respestN2", "resbestN1", "resbestN2", "resStrict1",
+		 * "resStrict2" };
 		 */// Create cells
 		for (int i = 0; i < columns.length; i++) {
 			Cell cell = headerRow.createCell(i);
@@ -300,10 +301,9 @@ public class TestComparatorTestRetestMultiLevel {
 		}
 
 	}
-	
-	
+
 	@Test
-	public void testRetest() throws IOException  {
+	public void testRetest() throws IOException {
 		ArrayList<Patient> patientlist = new ArrayList<>();
 
 		// Create a Workbook
@@ -360,9 +360,9 @@ public class TestComparatorTestRetestMultiLevel {
 		// Closing the workbook
 		workbook.close();
 	}
-	
+
 	@Test
-	public void testRetestAttentionDec() throws IOException  {
+	public void testRetestAttentionDec() throws IOException {
 		ArrayList<Patient> patientlist = new ArrayList<>();
 
 		// Create a Workbook
@@ -418,5 +418,118 @@ public class TestComparatorTestRetestMultiLevel {
 
 		// Closing the workbook
 		workbook.close();
+	}
+	
+	@Test
+	public void testRetestCSV() throws IOException {
+		ArrayList<Patient> patientlist = new ArrayList<>();
+
+		String filePath = "TestRetest" + System.currentTimeMillis()+".csv";
+		File file = new File(filePath);
+		// Create a Workbook
+		FileWriter outputfile = new FileWriter(file);
+		CSVWriter writer = new CSVWriter(outputfile);
+		String[] header = {"IdPatient", "Target", "TestType", "Time", "Steps", "Level", "FinalRes"};
+	    writer.writeNext(header);
+
+		for (int j = startingLevel; j >= 5; j--) {
+			// Generate X Patients with random level certified, at each for loop the maximum
+			// level certified decreases
+			patientlist.clear();
+			for (int i = 0; i < numpatients; i++)
+				patientlist.add(new Patient(j));
+			// Array to store data and save them to DB
+			List<ElementsType> results = new ArrayList<>();
+			for (int i = 0; i < numpatients; i++) {
+				// PestDepthCertifier
+				PestSim pest1 = new PestSim(j);
+				runPest(patientlist.get(i).getLevelCert(), pest1);
+				PestSim pest2 = new PestSim(j);
+				runPest(patientlist.get(i).getLevelCert(), pest2);
+				writer.writeNext(new String[] {String.valueOf(i), String.valueOf(j), "PEST", String.valueOf(0), String.valueOf(pest1.getStepsPest()),String.valueOf(pest1.getDp().getCurrentThreshold()),String.valueOf(pest1.getDp().getCurrentStatus().currentResult.toString()) });
+				writer.writeNext(new String[] {String.valueOf(i), String.valueOf(j), "PEST", String.valueOf(1), String.valueOf(pest2.getStepsPest()),String.valueOf(pest2.getDp().getCurrentThreshold()),String.valueOf(pest2.getDp().getCurrentStatus().currentResult.toString()) });
+				
+				// PestDepthCertifierNew
+				PestNSim pestN1 = new PestNSim(j);
+				runPestN(patientlist.get(i).getLevelCert(), pestN1);
+				PestNSim pestN2 = new PestNSim(j);
+				runPestN(patientlist.get(i).getLevelCert(), pestN2);
+				writer.writeNext(new String[] {String.valueOf(i), String.valueOf(j), "PESTN", String.valueOf(0), String.valueOf(pestN1.getStepsPestN()),String.valueOf(pestN1.getDp().getCurrentThreshold()),String.valueOf(pestN1.getDp().getCurrentStatus().currentResult.toString()) });
+				writer.writeNext(new String[] {String.valueOf(i), String.valueOf(j), "PESTN", String.valueOf(1), String.valueOf(pestN2.getStepsPestN()),String.valueOf(pestN2.getDp().getCurrentThreshold()),String.valueOf(pestN2.getDp().getCurrentStatus().currentResult.toString()) });
+				
+				// bestNepthCertifier
+				BestNSim bestN1 = new BestNSim(j);
+				runBestN(patientlist.get(i).getLevelCert(), bestN1);
+				BestNSim bestN2 = new BestNSim(j);
+				runBestN(patientlist.get(i).getLevelCert(), bestN2);
+				writer.writeNext(new String[] {String.valueOf(i), String.valueOf(j), "BESTN", String.valueOf(0), String.valueOf(bestN1.getStepsBestN()),String.valueOf(bestN1.getDp().getCurrentThreshold()),String.valueOf(bestN1.getDp().getCurrentStatus().currentResult.toString()) });
+				writer.writeNext(new String[] {String.valueOf(i), String.valueOf(j), "BESTN", String.valueOf(1), String.valueOf(bestN2.getStepsBestN()),String.valueOf(bestN2.getDp().getCurrentThreshold()),String.valueOf(bestN2.getDp().getCurrentStatus().currentResult.toString()) });
+				
+				// StrictStaircaseDepthCertifier
+				StrictSim strict1 = new StrictSim(j);
+				runStrict(patientlist.get(i).getLevelCert(), strict1);
+				StrictSim strict2 = new StrictSim(j);
+				runStrict(patientlist.get(i).getLevelCert(), strict2);
+				writer.writeNext(new String[] {String.valueOf(i), String.valueOf(j), "STRICTN", String.valueOf(0), String.valueOf(strict1.getStepsStrict()),String.valueOf(strict1.getDp().getCurrentThreshold()),String.valueOf(strict1.getDp().getCurrentStatus().currentResult.toString()) });
+				writer.writeNext(new String[] {String.valueOf(i), String.valueOf(j), "STRICTN", String.valueOf(1), String.valueOf(strict2.getStepsStrict()),String.valueOf(strict2.getDp().getCurrentThreshold()),String.valueOf(strict2.getDp().getCurrentStatus().currentResult.toString()) });			
+			}
+		}
+	}
+
+
+	@Test
+	public void testRetestAttentionDecCSV() throws IOException {
+		ArrayList<Patient> patientlist = new ArrayList<>();
+		String filePath = "Test" + System.currentTimeMillis()+".csv";
+		File file = new File(filePath);
+		// Create a Workbook
+		FileWriter outputfile = new FileWriter(file);
+		CSVWriter writer = new CSVWriter(outputfile);
+		String[] header = {"IdPatient", "Target", "TestType", "Time", "Steps", "Level", "FinalRes"};
+	    writer.writeNext(header);
+		for (int j = startingLevel; j >= 5; j--) {
+			// Generate X Patients with random level certified, at each for loop the maximum
+			// level certified decreases
+			patientlist.clear();
+			for (int i = 0; i < numpatients; i++)
+				patientlist.add(new Patient(j));
+			// Array to store data and save them to DB
+			List<ElementsType> results = new ArrayList<>();
+			for (int i = 0; i < numpatients; i++) {
+				// PestDepthCertifier
+				PestSim pest1 = new PestSim(j);
+				runPestAttention(patientlist.get(i).getLevelCert(), pest1);
+				PestSim pest2 = new PestSim(j);
+				runPestAttention(patientlist.get(i).getLevelCert(), pest2);
+				writer.writeNext(new String[] {String.valueOf(i), String.valueOf(j), "PEST", String.valueOf(0), String.valueOf(pest1.getStepsPest()),String.valueOf(pest1.getDp().getCurrentThreshold()),String.valueOf(pest1.getDp().getCurrentStatus().currentResult.toString()) });
+				writer.writeNext(new String[] {String.valueOf(i), String.valueOf(j), "PEST", String.valueOf(1), String.valueOf(pest2.getStepsPest()),String.valueOf(pest2.getDp().getCurrentThreshold()),String.valueOf(pest2.getDp().getCurrentStatus().currentResult.toString()) });
+				
+				// PestDepthCertifierNew
+				PestNSim pestN1 = new PestNSim(j);
+				runPestNAttention(patientlist.get(i).getLevelCert(), pestN1);
+				PestNSim pestN2 = new PestNSim(j);
+				runPestNAttention(patientlist.get(i).getLevelCert(), pestN2);
+				writer.writeNext(new String[] {String.valueOf(i), String.valueOf(j), "PESTN", String.valueOf(0), String.valueOf(pestN1.getStepsPestN()),String.valueOf(pestN1.getDp().getCurrentThreshold()),String.valueOf(pestN1.getDp().getCurrentStatus().currentResult.toString()) });
+				writer.writeNext(new String[] {String.valueOf(i), String.valueOf(j), "PESTN", String.valueOf(1), String.valueOf(pestN2.getStepsPestN()),String.valueOf(pestN2.getDp().getCurrentThreshold()),String.valueOf(pestN2.getDp().getCurrentStatus().currentResult.toString()) });
+				
+				// bestNepthCertifier
+				BestNSim bestN1 = new BestNSim(j);
+				runBestNAttention(patientlist.get(i).getLevelCert(), bestN1);
+				BestNSim bestN2 = new BestNSim(j);
+				runBestNAttention(patientlist.get(i).getLevelCert(), bestN2);
+				writer.writeNext(new String[] {String.valueOf(i), String.valueOf(j), "BESTN", String.valueOf(0), String.valueOf(bestN1.getStepsBestN()),String.valueOf(bestN1.getDp().getCurrentThreshold()),String.valueOf(bestN1.getDp().getCurrentStatus().currentResult.toString()) });
+				writer.writeNext(new String[] {String.valueOf(i), String.valueOf(j), "BESTN", String.valueOf(1), String.valueOf(bestN2.getStepsBestN()),String.valueOf(bestN2.getDp().getCurrentThreshold()),String.valueOf(bestN2.getDp().getCurrentStatus().currentResult.toString()) });
+				
+				// StrictStaircaseDepthCertifier
+				StrictSim strict1 = new StrictSim(j);
+				runStrictAttention(patientlist.get(i).getLevelCert(), strict1);
+				StrictSim strict2 = new StrictSim(j);
+				runStrictAttention(patientlist.get(i).getLevelCert(), strict2);
+				writer.writeNext(new String[] {String.valueOf(i), String.valueOf(j), "STRICTN", String.valueOf(0), String.valueOf(strict1.getStepsStrict()),String.valueOf(strict1.getDp().getCurrentThreshold()),String.valueOf(strict1.getDp().getCurrentStatus().currentResult.toString()) });
+				writer.writeNext(new String[] {String.valueOf(i), String.valueOf(j), "STRICTN", String.valueOf(1), String.valueOf(strict2.getStepsStrict()),String.valueOf(strict2.getDp().getCurrentThreshold()),String.valueOf(strict2.getDp().getCurrentStatus().currentResult.toString()) });
+				
+			}
+		}
+		// Write the output to a file
 	}
 }
