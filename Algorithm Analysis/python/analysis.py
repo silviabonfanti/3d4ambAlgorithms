@@ -7,6 +7,7 @@ datas0=pd.read_csv("Tests0.csv", quoting=csv.QUOTE_NONE)
 datas1=pd.read_csv("Tests1.csv", quoting=csv.QUOTE_NONE)
 datas2=pd.read_csv("Tests2.csv", quoting=csv.QUOTE_NONE)
 dataatt=pd.read_csv("TestAttention.csv", quoting=csv.QUOTE_NONE)
+
 '''
 ############################
 # Research question 1
@@ -142,3 +143,17 @@ stepS2=datas2.groupby(['TestType'])['Steps'].mean()
 print(stepS2)
 stepAtt=dataatt.groupby(['TestType'])['Steps'].mean()
 print(stepAtt)
+
+
+certificationCorrectS0 = (datas0["FinalRes"]=="FINISH_CERTIFIED") & (datas0["Target"]==datas0["Level"])
+countCertS0 = datas0["Target"][certificationCorrectS0].groupby(datas0['TestType']).count()
+print("Certified = Target S0 " +  str(countCertS0))
+
+#CONTINUARE QUI!!!! SISTEMARE PER S1 S2 E ATT
+certificationCorrectS1 = (datas1["FinalRes"]=="FINISH_CERTIFIED") & (datas1["Target"]==datas0["Level"])
+countCertS0 = datas0["Target"][certificationCorrectS0].groupby(datas0['TestType']).count()
+print("Certified = Target S0 " +  str(countCertS0))
+
+certificationCorrectS0 = (datas0["FinalRes"]=="FINISH_CERTIFIED") & (datas0["Target"]==datas0["Level"])
+countCertS0 = datas0["Target"][certificationCorrectS0].groupby(datas0['TestType']).count()
+print("Certified = Target S0 " +  str(countCertS0))
