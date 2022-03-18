@@ -111,21 +111,25 @@ public class TestComparatorTestRetestMultiLevel {
 		bestN.setStepsBestN(bestN.getStepsBestN() + 1);
 	}
 
-	private static void runPestN(int patientLevelCert, PestNSim pestN) {
-		do {
-			pestNStep(patientLevelCert, pestN, probExpectedAnswNotCert, probExpectedAnsw);
-		} while (pestN.getDp().getCurrentStatus().currentResult.equals(CONTINUE));
+	private static void runPestN(int patientLevelCert, PestNSim pestN, boolean attention) {
+		if (attention) {
+			int countSteps = 0;
+			do {
+				countSteps++;
+				if (countSteps <= stepAttentionDec)
+					pestNStep(patientLevelCert, pestN, probExpectedAnswNotCert, probExpectedAnsw);
+				else
+					pestNStep(patientLevelCert, pestN, probExpectedAnswNotCertAttentionDec,
+							probExpectedAnswAttentionDec);
+			} while (pestN.getDp().getCurrentStatus().currentResult.equals(CONTINUE));
+		} else
+			do {
+				pestNStep(patientLevelCert, pestN, probExpectedAnswNotCert, probExpectedAnsw);
+			} while (pestN.getDp().getCurrentStatus().currentResult.equals(CONTINUE));
 	}
 
 	private static void runPestNAttention(int patientLevelCert, PestNSim pestN) {
-		int countSteps = 0;
-		do {
-			countSteps++;
-			if (countSteps <= stepAttentionDec)
-				pestNStep(patientLevelCert, pestN, probExpectedAnswNotCert, probExpectedAnsw);
-			else
-				pestNStep(patientLevelCert, pestN, probExpectedAnswNotCertAttentionDec, probExpectedAnswAttentionDec);
-		} while (pestN.getDp().getCurrentStatus().currentResult.equals(CONTINUE));
+		runPestN(patientLevelCert, pestN, true);
 	}
 
 	private static void pestNStep(int patientLevelCert, PestNSim pestN, double probexpectedanswnotcert,
@@ -144,21 +148,24 @@ public class TestComparatorTestRetestMultiLevel {
 		pestN.setStepsPestN(pestN.getStepsPestN() + 1);
 	}
 
-	private static void runPest(int patientLevelCert, PestSim pest) {
-		do {
-			pestStep(patientLevelCert, pest, probExpectedAnswNotCert, probExpectedAnsw);
-		} while (pest.getDp().getCurrentStatus().currentResult.equals(CONTINUE));
+	private static void runPest(int patientLevelCert, PestSim pest, boolean attention) {
+		if (attention) {
+			int countSteps = 0;
+			do {
+				countSteps++;
+				if (countSteps <= stepAttentionDec)
+					pestStep(patientLevelCert, pest, probExpectedAnswNotCert, probExpectedAnsw);
+				else
+					pestStep(patientLevelCert, pest, probExpectedAnswNotCertAttentionDec, probExpectedAnswAttentionDec);
+			} while (pest.getDp().getCurrentStatus().currentResult.equals(CONTINUE));
+		} else
+			do {
+				pestStep(patientLevelCert, pest, probExpectedAnswNotCert, probExpectedAnsw);
+			} while (pest.getDp().getCurrentStatus().currentResult.equals(CONTINUE));
 	}
 
 	private static void runPestAttention(int patientLevelCert, PestSim pest) {
-		int countSteps = 0;
-		do {
-			countSteps++;
-			if (countSteps <= stepAttentionDec)
-				pestStep(patientLevelCert, pest, probExpectedAnswNotCert, probExpectedAnsw);
-			else
-				pestStep(patientLevelCert, pest, probExpectedAnswNotCertAttentionDec, probExpectedAnswAttentionDec);
-		} while (pest.getDp().getCurrentStatus().currentResult.equals(CONTINUE));
+		runPest(patientLevelCert, pest, true);
 	}
 
 	private static void pestStep(int patientLevelCert, PestSim pest, double probexpectedanswnotcert,
@@ -323,15 +330,15 @@ public class TestComparatorTestRetestMultiLevel {
 			for (int i = 0; i < numpatients; i++) {
 				// PestDepthCertifier
 				PestSim pest1 = new PestSim(j);
-				runPest(patientlist.get(i).getLevelCert(), pest1);
+				runPest(patientlist.get(i).getLevelCert(), pest1, false);
 				PestSim pest2 = new PestSim(j);
-				runPest(patientlist.get(i).getLevelCert(), pest2);
+				runPest(patientlist.get(i).getLevelCert(), pest2, false);
 
 				// PestDepthCertifierNew
 				PestNSim pestN1 = new PestNSim(j);
-				runPestN(patientlist.get(i).getLevelCert(), pestN1);
+				runPestN(patientlist.get(i).getLevelCert(), pestN1, false);
 				PestNSim pestN2 = new PestNSim(j);
-				runPestN(patientlist.get(i).getLevelCert(), pestN2);
+				runPestN(patientlist.get(i).getLevelCert(), pestN2, false);
 
 				// bestNepthCertifier
 				BestNSim bestN1 = new BestNSim(j);
@@ -456,7 +463,7 @@ public class TestComparatorTestRetestMultiLevel {
 				probExpectedAnsw = 0.9;
 				probExpectedAnswNotCert = 0.9;
 				break;
-			}			
+			}
 			for (int j = startingLevel; j >= startingLevel; j--) {
 				// Generate X Patients with random level certified, at each for loop the maximum
 				// level certified decreases
@@ -468,9 +475,9 @@ public class TestComparatorTestRetestMultiLevel {
 				for (int i = 0; i < numpatients; i++) {
 					// PestDepthCertifier
 					PestSim pest1 = new PestSim(j);
-					runPest(patientlist.get(i).getLevelCert(), pest1);
+					runPest(patientlist.get(i).getLevelCert(), pest1, s == Scenario.S3);
 					PestSim pest2 = new PestSim(j);
-					runPest(patientlist.get(i).getLevelCert(), pest2);
+					runPest(patientlist.get(i).getLevelCert(), pest2, s == Scenario.S3);
 					writer.writeNext(new String[] { s.name(), String.valueOf(i),
 							String.valueOf(patientlist.get(i).getLevelCert()), "PEST", String.valueOf(0),
 							String.valueOf(pest1.getStepsPest()), String.valueOf(pest1.getDp().getCurrentThreshold()),
@@ -482,9 +489,9 @@ public class TestComparatorTestRetestMultiLevel {
 
 					// PestDepthCertifierNew
 					PestNSim pestN1 = new PestNSim(j);
-					runPestN(patientlist.get(i).getLevelCert(), pestN1);
+					runPestN(patientlist.get(i).getLevelCert(), pestN1, s == Scenario.S3);
 					PestNSim pestN2 = new PestNSim(j);
-					runPestN(patientlist.get(i).getLevelCert(), pestN2);
+					runPestN(patientlist.get(i).getLevelCert(), pestN2, s == Scenario.S3);
 					writer.writeNext(new String[] { s.name(), String.valueOf(i),
 							String.valueOf(patientlist.get(i).getLevelCert()), "PESTN", String.valueOf(0),
 							String.valueOf(pestN1.getStepsPestN()),
