@@ -1,3 +1,5 @@
+# %% 
+
 import numpy as  np
 import pandas as pd
 import csv
@@ -131,7 +133,7 @@ print(S2TP)
 AttTP=(filterAttTP).groupby(dataatt['TestType']).sum()
 print("Att")
 print(AttTP)
-'''
+
 ############################
 # Reserch question 2
 # number of steps
@@ -144,16 +146,50 @@ print(stepS2)
 stepAtt=dataatt.groupby(['TestType'])['Steps'].mean()
 print(stepAtt)
 
-
+############################
+# Reserch question 3
+# algorithm that guarantees measured level equals to target level
 certificationCorrectS0 = (datas0["FinalRes"]=="FINISH_CERTIFIED") & (datas0["Target"]==datas0["Level"])
 countCertS0 = datas0["Target"][certificationCorrectS0].groupby(datas0['TestType']).count()
 print("Certified = Target S0 " +  str(countCertS0))
 
-#CONTINUARE QUI!!!! SISTEMARE PER S1 S2 E ATT
-certificationCorrectS1 = (datas1["FinalRes"]=="FINISH_CERTIFIED") & (datas1["Target"]==datas0["Level"])
-countCertS0 = datas0["Target"][certificationCorrectS0].groupby(datas0['TestType']).count()
-print("Certified = Target S0 " +  str(countCertS0))
 
-certificationCorrectS0 = (datas0["FinalRes"]=="FINISH_CERTIFIED") & (datas0["Target"]==datas0["Level"])
-countCertS0 = datas0["Target"][certificationCorrectS0].groupby(datas0['TestType']).count()
-print("Certified = Target S0 " +  str(countCertS0))
+certificationCorrectS1 = (datas1["FinalRes"]=="FINISH_CERTIFIED") & (datas1["Target"]==datas1["Level"])
+countCertS1 = datas1["Target"][certificationCorrectS1].groupby(datas1['TestType']).count()
+print("Certified = Target S1 " +  str(countCertS1))
+
+certificationCorrectS2 = (datas2["FinalRes"]=="FINISH_CERTIFIED") & (datas2["Target"]==datas2["Level"])
+countCertS2 = datas2["Target"][certificationCorrectS2].groupby(datas2['TestType']).count()
+print("Certified = Target S2 " +  str(countCertS2))
+
+certificationCorrectatt = (dataatt["FinalRes"]=="FINISH_CERTIFIED") & (dataatt["Target"]==dataatt["Level"])
+countCertatt = dataatt["Target"][certificationCorrectatt].groupby(dataatt['TestType']).count()
+print("Certified = Target Att " +  str(countCertatt))
+
+
+############################
+# Reserch question 4
+# algorithm with the minimum difference between target level and measured level
+datas0['DiffTargetCert'] = datas0["Target"]-datas0["Level"]
+countDiffMinS0=datas0[(datas0["Target"]!=0)].groupby(['TestType','DiffTargetCert']).count()
+print("Certified = S0 \n" + str(countDiffMinS0))
+
+datas1['DiffTargetCert'] = datas1["Target"]-datas1["Level"]
+countDiffMinS1=datas1[(datas1["Target"]!=0)].groupby(['TestType','DiffTargetCert']).count()
+print("Certified = S1 \n" + str(countDiffMinS1))
+
+datas2['DiffTargetCert'] = datas2["Target"]-datas2["Level"]
+countDiffMinS2=datas2[(datas2["Target"]!=0)].groupby(['TestType','DiffTargetCert']).count()
+print("Certified = S2 \n" + str(countDiffMinS2))
+'''
+dataatt['DiffTargetCert'] = dataatt["Target"]-dataatt["Level"]
+countDiffMinatt=dataatt[(dataatt["Target"]!=0)].groupby(['TestType','DiffTargetCert']).count()
+print("Certified = Target Att \n" + str(countDiffMinatt.to_string()))
+countDiffMinatt2=countDiffMinatt.loc['BESTN']
+print("Certified = Target Att \n" + str(countDiffMinatt2.to_string()))
+countDiffMinatt2.plot(x="DiffTargetCert", y="Level",kind="bar")
+#hist = countDiffMinatt2.hist('Level')
+
+
+
+
