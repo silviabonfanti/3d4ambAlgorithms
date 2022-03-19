@@ -41,7 +41,7 @@ falsePos0%>%
 
 
 # True Negative: target 0 e FINISH_CERTIFIED
-trueNeg0 <- data22[data22$target = 0 & data22$finalResult != "FINISH_CERTIFIED",]
+trueNeg0 <- data22[data22$target == 0 & data22$finalResult != "FINISH_CERTIFIED",]
 trueNeg <-group_by(trueNeg0, trueNeg0$testType)
 summarise(trueNeg, count = n())
 # True Positive: target >0 e !FINISH_CERTIFIED
@@ -64,8 +64,8 @@ truePos0%>%
 #sensitivity
 
 # computeSensitivity <- function(scenario,testtype1) {
-#   x = trueNeg0Group[trueNeg0Group$testType==testtype1 & trueNeg0Group$scenario==scenario,][1,3]
-#   y = falsePos0Group[falsePos0Group$testType==testtype1 & falsePos0Group$scenario==scenario,][1,3]
+#   x = trueNeg0[trueNeg0$testType==testtype1 & trueNeg0$scenario==scenario,]
+#   y = falsePos0[falsePos0$testType==testtype1 & falsePos0$scenario==scenario,]
 #  if (length(x)==0){
 #     x=tibble(0)
 #   }
@@ -75,23 +75,36 @@ truePos0%>%
 #   print(x)
 #   print(y)
 #   x/(x+y)
-#  # trueNeg0Group[trueNeg0Group$testType==testtype1 & trueNeg0Group$scenario==scenario,][3]/(trueNeg0Group[trueNeg0Group$testType==testtype1 & trueNeg0Group$scenario==scenario,][3]+falsePos0Group[falsePos0Group$testType==testtype1 & falsePos0Group$scenario==scenario,][3])
+# #  trueNeg0Group[trueNeg0Group$testType==testtype1 & trueNeg0Group$scenario==scenario,][3]/(trueNeg0Group[trueNeg0Group$testType==testtype1 & trueNeg0Group$scenario==scenario,][3]+falsePos0Group[falsePos0Group$testType==testtype1 & falsePos0Group$scenario==scenario,][3])
 # }
-# 
-# computeSensitivity(1,"STRICTN")
-# computeSensitivity(1,"BESTN")
-# computeSensitivity(1,"PEST")
-# computeSensitivity(1,"PESTN")
-# 
-# computeSensitivity(2,"STRICTN")
-# computeSensitivity(2,"BESTN")
-# computeSensitivity(2,"PEST")
-# computeSensitivity(2,"PESTN")
-# 
-# computeSensitivity(3,"STRICTN")
-# computeSensitivity(3,"BESTN")
-# computeSensitivity(3,"PEST")
-# computeSensitivity(3,"PESTN")
+
+computeSS <- function(scenario,testtype1) {
+  TN = count(trueNeg0[trueNeg0$testType==testtype1 & trueNeg0$scenario==scenario,])
+  FP = count(falsePos0[falsePos0$testType==testtype1 & falsePos0$scenario==scenario,])
+  TP = count(truePos0[truePos0$testType==testtype1 & truePos0$scenario==scenario,])
+  FN = count(falseNeg0[falseNeg0$testType==testtype1 & falseNeg0$scenario==scenario,])
+  print("specificity")
+  print(TN/(TN+FP))
+  print("Sensitivity")
+  print(TP/(TP+FN))
+}
+
+
+computeSS(1,"STRICTN")
+computeSS(2,"STRICTN")
+computeSS(3,"STRICTN")
+
+computeSS(1,"BESTN")
+computeSS(2,"BESTN")
+computeSS(3,"BESTN")
+
+computeSS(1,"PEST")
+computeSS(2,"PEST")
+computeSS(3,"PEST")
+
+computeSS(1,"PESTN")
+computeSS(2,"PESTN")
+computeSS(3,"PESTN")
 
 # Proportion test
 # https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/prop.test
