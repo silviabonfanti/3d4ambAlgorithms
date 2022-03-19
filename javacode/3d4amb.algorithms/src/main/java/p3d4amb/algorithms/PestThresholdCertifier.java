@@ -12,6 +12,7 @@ public class PestThresholdCertifier extends ThresholdCertifier {
 	private int limitR;
 	private int chance;
 	private double value;
+	private boolean certify=false;
 
 	// Logger
 	private final Logger logger = Logger.getLogger(PestThresholdCertifier.class);
@@ -70,7 +71,7 @@ public class PestThresholdCertifier extends ThresholdCertifier {
 			value = ((double) limitL + limitR) / 2;
 			// Next threshold
 			certifierStatus.currentThreshold = (int) (Math.floor(value));
-
+			
 			if ((limitL - limitR) == 1) {
 				certifierStatus.currentResult = Result.FINISH_CERTIFIED;
 				certifierStatus.currentThreshold = limitR;

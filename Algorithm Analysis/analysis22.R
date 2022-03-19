@@ -7,7 +7,7 @@ data22 = read.csv("data22.csv", sep=",")
 
 # add some columns that will be used to compute percatenges
 # nxtestType number of observations for each test type
-dat22 %>%
+data22 %>%
   group_by(testType) %>%
   mutate(nxtestType = n())
 data22 %>%
@@ -17,7 +17,7 @@ data22 %>%
 # Number of observation
 nxtestType <- as.numeric(count(data22[data22$testType == "PEST",]))
 # Number of observation for each test type and scenario
-nxtestTypeScenario <- as.numeric(count(dat222[data22$testType == "PEST" & data22$scenario == 0,]))
+nxtestTypeScenario <- as.numeric(count(data22[data22$testType == "PEST" & data22$scenario == 0,]))
 
 ############################
 # Research question 1
@@ -38,8 +38,10 @@ falsePos0%>%
   group_by(scenario,testType) %>%
   summarise(count = n())
 
+
+
 # True Negative: target 0 e FINISH_CERTIFIED
-trueNeg0 <- data22[data22$target > 0 & data22$finalResult != "FINISH_CERTIFIED",]
+trueNeg0 <- data22[data22$target = 0 & data22$finalResult != "FINISH_CERTIFIED",]
 trueNeg <-group_by(trueNeg0, trueNeg0$testType)
 summarise(trueNeg, count = n())
 # True Positive: target >0 e !FINISH_CERTIFIED
@@ -51,9 +53,45 @@ summarise(truePos, count = n())
 trueNeg0%>%
   group_by(scenario,testType) %>%
   summarise(count = n())
+
 truePos0%>%
   group_by(scenario,testType) %>%
   summarise(count = n())
+
+
+
+
+#sensitivity
+
+# computeSensitivity <- function(scenario,testtype1) {
+#   x = trueNeg0Group[trueNeg0Group$testType==testtype1 & trueNeg0Group$scenario==scenario,][1,3]
+#   y = falsePos0Group[falsePos0Group$testType==testtype1 & falsePos0Group$scenario==scenario,][1,3]
+#  if (length(x)==0){
+#     x=tibble(0)
+#   }
+#   if (length(y)==0){
+#     y=data.frame(c(0))
+#   }
+#   print(x)
+#   print(y)
+#   x/(x+y)
+#  # trueNeg0Group[trueNeg0Group$testType==testtype1 & trueNeg0Group$scenario==scenario,][3]/(trueNeg0Group[trueNeg0Group$testType==testtype1 & trueNeg0Group$scenario==scenario,][3]+falsePos0Group[falsePos0Group$testType==testtype1 & falsePos0Group$scenario==scenario,][3])
+# }
+# 
+# computeSensitivity(1,"STRICTN")
+# computeSensitivity(1,"BESTN")
+# computeSensitivity(1,"PEST")
+# computeSensitivity(1,"PESTN")
+# 
+# computeSensitivity(2,"STRICTN")
+# computeSensitivity(2,"BESTN")
+# computeSensitivity(2,"PEST")
+# computeSensitivity(2,"PESTN")
+# 
+# computeSensitivity(3,"STRICTN")
+# computeSensitivity(3,"BESTN")
+# computeSensitivity(3,"PEST")
+# computeSensitivity(3,"PESTN")
 
 # Proportion test
 # https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/prop.test
@@ -73,18 +111,7 @@ prop.test(FNProp$FN,FNProp$nxtestType)
 #Proportion test for each scenario: False negative
 #scenario 1
 FNProp<-falseNeg0%>%
-  filter(scenario==0)%>%
-  group_by(testType) %>%
-  summarise(FN = n())%>%
-  mutate(nxtestType=nxtestType)
-FNProp
-
-prop.test(FNProp$FN,FNProp$nxtestType)
-
-#Proportion test for each scenario: False negative
-#scenario 1
-FNProp<-falseNeg0%>%
-  filter(scenario==1)%>%
+  dplyr::filter(scenario==1)%>%
   group_by(testType) %>%
   summarise(FN = n())%>%
   mutate(nxtestType=nxtestType)
@@ -94,7 +121,7 @@ prop.test(FNProp$FN,FNProp$nxtestType)
 
 #scenario2
 FNProp<-falseNeg0%>%
-  filter(scenario==2)%>%
+  dplyr::filter(scenario==2)%>%
   group_by(testType) %>%
   summarise(FN = n())%>%
   mutate(nxtestType=nxtestType)
@@ -102,9 +129,9 @@ FNProp
 
 prop.test(FNProp$FN,FNProp$nxtestType)
 
-#scenario2
+#scenario3
 FNProp<-falseNeg0%>%
-  filter(scenario==3)%>%
+  dplyr::filter(scenario==3)%>%
   group_by(testType) %>%
   summarise(FN = n())%>%
   mutate(nxtestType=nxtestType)
@@ -122,19 +149,10 @@ FPProp
 prop.test(FPProp$FP,FPProp$nxtestType)
 
 #Proportion test for false negative
-#scenario 0
-FPProp<-falsePos0%>%
-  filter(scenario==0)%>%
-  group_by(testType) %>%
-  summarise(FP = n())%>%
-  mutate(nxtestType=nxtestType)
-FPProp
-
-prop.test(FPProp$FP,FPProp$nxtestType)
 
 #scenario 1
 FPProp<-falsePos0%>%
-  filter(scenario==1)%>%
+  dplyr::filter(scenario==1)%>%
   group_by(testType) %>%
   summarise(FP = n())%>%
   mutate(nxtestType=nxtestType)
@@ -144,7 +162,7 @@ prop.test(FPProp$FP,FPProp$nxtestType)
 
 #scenario2
 FPProp<-falsePos0%>%
-  filter(scenario==2)%>%
+  dplyr::filter(scenario==2)%>%
   group_by(testType) %>%
   summarise(FP = n())%>%
   mutate(nxtestType=nxtestType)
@@ -154,7 +172,7 @@ prop.test(FPProp$FP,FPProp$nxtestType)
 
 #scenario3
 FPProp<-falsePos0%>%
-  filter(scenario==3)%>%
+  dplyr::filter(scenario==3)%>%
   group_by(testType) %>%
   summarise(FP = n())%>%
   mutate(nxtestType=nxtestType)
@@ -183,30 +201,54 @@ computeNullHypSteps <- function(scenario,testtype1,testtype2) {
 computeNullHypSteps(0,"STRICTN","PESTN")
 computeNullHypSteps(0,"STRICTN","PEST")
 computeNullHypSteps(0,"STRICTN","BESTN")
+computeNullHypSteps(0,"PESTN","STRICTN")
 computeNullHypSteps(0,"PESTN","PEST")
 computeNullHypSteps(0,"PESTN","BESTN")
 computeNullHypSteps(0,"PEST","BESTN")
+computeNullHypSteps(0,"PEST","STRICTN")
+computeNullHypSteps(0,"PEST","PESTN")
+computeNullHypSteps(0,"BESTN","PESTN")
+computeNullHypSteps(0,"BESTN","STRICTN")
+computeNullHypSteps(0,"BESTN","PEST")
 
 computeNullHypSteps(1,"STRICTN","PESTN")
 computeNullHypSteps(1,"STRICTN","PEST")
 computeNullHypSteps(1,"STRICTN","BESTN")
+computeNullHypSteps(1,"PESTN","STRICTN")
 computeNullHypSteps(1,"PESTN","PEST")
 computeNullHypSteps(1,"PESTN","BESTN")
 computeNullHypSteps(1,"PEST","BESTN")
+computeNullHypSteps(1,"PEST","STRICTN")
+computeNullHypSteps(1,"PEST","PESTN")
+computeNullHypSteps(1,"BESTN","PESTN")
+computeNullHypSteps(1,"BESTN","STRICTN")
+computeNullHypSteps(1,"BESTN","PEST")
 
 computeNullHypSteps(2,"STRICTN","PESTN")
 computeNullHypSteps(2,"STRICTN","PEST")
 computeNullHypSteps(2,"STRICTN","BESTN")
+computeNullHypSteps(2,"PESTN","STRICTN")
 computeNullHypSteps(2,"PESTN","PEST")
 computeNullHypSteps(2,"PESTN","BESTN")
 computeNullHypSteps(2,"PEST","BESTN")
+computeNullHypSteps(2,"PEST","STRICTN")
+computeNullHypSteps(2,"PEST","PESTN")
+computeNullHypSteps(2,"BESTN","PESTN")
+computeNullHypSteps(2,"BESTN","STRICTN")
+computeNullHypSteps(2,"BESTN","PEST")
 
 computeNullHypSteps(3,"STRICTN","PESTN")
 computeNullHypSteps(3,"STRICTN","PEST")
 computeNullHypSteps(3,"STRICTN","BESTN")
+computeNullHypSteps(3,"PESTN","STRICTN")
 computeNullHypSteps(3,"PESTN","PEST")
 computeNullHypSteps(3,"PESTN","BESTN")
 computeNullHypSteps(3,"PEST","BESTN")
+computeNullHypSteps(3,"PEST","STRICTN")
+computeNullHypSteps(3,"PEST","PESTN")
+computeNullHypSteps(3,"BESTN","PESTN")
+computeNullHypSteps(3,"BESTN","STRICTN")
+computeNullHypSteps(3,"BESTN","PEST")
 
 ############################
 # Reserch question 3
@@ -215,7 +257,7 @@ computeNullHypSteps(3,"PEST","BESTN")
  correct$diff = abs(correct$target - correct$level)
  
  correct%>%
-   filter(diff==0) %>%
+   dplyr::filter(diff==0) %>%
    group_by(scenario, testType) %>%
    summarise(count = n())
  
@@ -234,30 +276,30 @@ tbl2 <- with(diff02, table(diff, testType))
 diff03 <-diffNOAbs[diffNOAbs$diff != 0 & diffNOAbs$scenario == 3,]
 tbl3 <- with(diff03, table(diff, testType))
 
-opar = par(oma = c(2,0,0,0))
-barplot(tbl1, beside = TRUE, col = cm.colors(17))
+opar = par(oma = c(2,0,0,0),family = "mono")
+barplot(tbl1, beside = TRUE, col = rainbow(29), horiz=FALSE,  ylim=c(0, 2200))
 par(opar) # Reset par
-opar =par(oma = c(0,0,0,0), mar = c(0,0,0,0), new = TRUE)
-legend(x = "bottom", legend = rownames(tbl1), fill = cm.colors(17), bty = "n", ncol = 6, inset = -0.2)
+opar =par(oma = c(0,0,0,0), mar = c(0,0,0,0), new = TRUE,family = "mono")
+legend(x = "bottom", legend = rownames(tbl1), fill = rainbow(29), bty = "n", ncol = 15, inset = -0.1)
 par(opar) # reset par
 
-opar = par(oma = c(2,0,0,0))
-barplot(tbl2, beside = TRUE, col = cm.colors(17))
+opar = par(oma = c(2,0,0,0),family = "mono")
+barplot(tbl2, beside = TRUE, col = rainbow(29), horiz=FALSE,  ylim=c(0, 2200))
 par(opar) # Reset par
-opar =par(oma = c(0,0,0,0), mar = c(0,0,0,0), new = TRUE)
-legend(x = "bottom", legend = rownames(tbl2), fill = cm.colors(17), bty = "n", ncol = 6, inset = -0.2)
+opar =par(oma = c(0,0,0,0), mar = c(0,0,0,0), new = TRUE,family = "mono")
+legend(x = "bottom", legend = rownames(tbl2), fill = rainbow(29), bty = "n", ncol = 15, inset = -0.1)
 par(opar) # reset par
 
-opar = par(oma = c(2,0,0,0))
-barplot(tbl3, beside = TRUE, col = cm.colors(17))
+opar = par(oma = c(2,0,0,0),family = "mono")
+barplot(tbl3, beside = TRUE, col = rainbow(29), horiz=FALSE,  ylim=c(0, 2200))
 par(opar) # Reset par
-opar =par(oma = c(0,0,0,0), mar = c(0,0,0,0), new = TRUE)
-legend(x = "bottom", legend = rownames(tbl3), fill = cm.colors(17), bty = "n", ncol = 6, inset = -0.2)
+opar =par(oma = c(0,0,0,0), mar = c(0,0,0,0), new = TRUE,family = "mono")
+legend(x = "bottom", legend = rownames(tbl3), fill = rainbow(29), bty = "n", ncol = 15, inset = -0.1)
 par(opar) # reset par
 
 
 myResNoAbs<-diffNOAbs%>%
-filter(diff!=0) %>%
+  dplyr::filter(diff!=0) %>%
 group_by(scenario, testType, diff) %>%
 summarise(n())
   

@@ -24,7 +24,7 @@ public class PestThresholdCertifierTest extends ThresholdCertifierTest{
 		assertEquals(12, dp.getCurrentThreshold());
 		checkGoTo(dp, Solution.RIGHT, 6, CONTINUE);
 		checkGoTo(dp, Solution.RIGHT, 3, CONTINUE);
-		checkGoTo(dp, Solution.RIGHT, 1, CONTINUE);
+		checkGoTo(dp, Solution.RIGHT, 2, CONTINUE);
 		checkGoTo(dp, Solution.RIGHT, 1, FINISH_CERTIFIED);
 	}
 
@@ -49,7 +49,7 @@ public class PestThresholdCertifierTest extends ThresholdCertifierTest{
 		checkGoTo(dp, Solution.WRONG, 12, CONTINUE);
 		checkGoTo(dp, Solution.RIGHT, 6, CONTINUE);
 		checkGoTo(dp, Solution.RIGHT, 3, CONTINUE);
-		checkGoTo(dp, Solution.RIGHT, 1, CONTINUE);
+		checkGoTo(dp, Solution.RIGHT, 2, CONTINUE);
 		checkGoTo(dp, Solution.RIGHT, 1, FINISH_CERTIFIED);
 	}
 
@@ -62,8 +62,7 @@ public class PestThresholdCertifierTest extends ThresholdCertifierTest{
 		assertEquals(12, dp.getCurrentThreshold());
 		checkGoTo(dp, Solution.RIGHT, 6, CONTINUE);
 		checkGoTo(dp, Solution.RIGHT, 3, CONTINUE);
-		checkGoTo(dp, Solution.RIGHT, 1, CONTINUE);
-		checkGoTo(dp, Solution.WRONG, 2, CONTINUE);
+		checkGoTo(dp, Solution.RIGHT, 2, CONTINUE);
 		checkGoTo(dp, Solution.WRONG, 3, FINISH_CERTIFIED);
 	}
 
@@ -89,7 +88,7 @@ public class PestThresholdCertifierTest extends ThresholdCertifierTest{
 		checkGoTo(dp, Solution.WRONG, 9, CONTINUE);
 		checkGoTo(dp, Solution.RIGHT, 7, CONTINUE);
 		checkGoTo(dp, Solution.WRONG, 8, CONTINUE);
-		checkGoTo(dp, Solution.RIGHT, 8, FINISH_CERTIFIED);
+		checkGoTo(dp, Solution.RIGHT, 7, FINISH_CERTIFIED);
 	}
 
 	/**
@@ -115,7 +114,7 @@ public class PestThresholdCertifierTest extends ThresholdCertifierTest{
 		checkGoTo(dp, Solution.WRONG, 9, CONTINUE);
 		checkGoTo(dp, Solution.RIGHT, 7, CONTINUE);
 		checkGoTo(dp, Solution.WRONG, 8, CONTINUE);
-		checkGoTo(dp, Solution.RIGHT, 8, FINISH_CERTIFIED);
+		checkGoTo(dp, Solution.RIGHT, 7, FINISH_CERTIFIED);
 	}
 
 	/**

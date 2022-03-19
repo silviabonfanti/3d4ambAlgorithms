@@ -69,10 +69,10 @@ public class PestNThresholdCertifierTest extends ThresholdCertifierTest{
 		checkGoTo(dp, Solution.RIGHT, 6, CONTINUE); // OK 12
 		checkGoTo(dp, Solution.RIGHT, 3, CONTINUE); // OK 6
 		checkGoTo(dp, Solution.RIGHT, 2, CONTINUE); // OK 3
-		checkGoTo(dp, Solution.WRONG, 2, CONTINUE); // NO 2
+		checkGoTo(dp, Solution.WRONG, 3, CONTINUE); // NO 2
 
-		checkGoTo(dp, Solution.WRONG, 3, CONTINUE); // NO 2 (HEAVY -> -4), SHIFT TO 3
-		checkGoTo(dp, Solution.RIGHT, 3, FINISH_CERTIFIED); // OK 3, FINISH_CERTIFIED
+		checkGoTo(dp, Solution.WRONG, 4, CONTINUE); // NO 2 (HEAVY -> -4), SHIFT TO 3
+		checkGoTo(dp, Solution.RIGHT, 4, FINISH_CERTIFIED); // OK 3, FINISH_CERTIFIED
 	}
 
 	/**
